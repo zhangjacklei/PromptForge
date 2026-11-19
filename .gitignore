@@ -1,0 +1,58 @@
+# ---------- macOS 系统垃圾 ----------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.LSOverride
+Icon\r
+
+# ---------- Xcode / 构建产物 ----------
+DerivedData/
+build/
+.build/
+dist/
+*.app
+*.dSYM
+*.dSYM.zip
+*.ipa
+*.xcarchive
+*.xcuserstate
+*.xcscmblueprint
+*.hmap
+*.moved-aside
+
+# Xcode 的个人设置（含本机窗口位置、上次打开的 scheme、签名身份）
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# SwiftPM
+.swiftpm/
+Package.resolved
+
+# ---------- 私有资产：不随仓库分发 ----------
+# 全量提示词库（300+ 条）只保留在本地与私有资料库；仓库内只有 5 条示例
+private/
+*.xlsx
+*.xls
+*.numbers
+*.pages
+*.key
+*.pem
+*.p12
+*.mobileprovision
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---------- 编辑器 ----------
+.vscode/
+.idea/
+*.swp
+*~

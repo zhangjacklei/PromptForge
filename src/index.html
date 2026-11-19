@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>提示词锻造台 · PromptForge</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="logo">◆</span>提示词锻造台<em>PromptForge</em></div>
+      <div class="stats" id="stats"></div>
+    </header>
+    <nav class="tabs" id="tabs">
+      <button data-tab="compose" class="active">装配</button>
+      <button data-tab="lexicon">词库</button>
+      <button data-tab="library">库</button>
+      <button data-tab="ingest">采集</button>
+      <button data-tab="lab">实验</button>
+      <button data-tab="bench">竞品</button>
+      <button data-tab="plan">方案</button>
+    </nav>
+    <main><div class="view" id="view"></div></main>
+  </div>
+  <script src="../data/library.js"></script>
+  <script src="bench.js"></script>
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

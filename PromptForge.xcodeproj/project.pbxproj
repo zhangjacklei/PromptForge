@@ -1,0 +1,425 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B927110512340789122C00C7 /* PromptForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DA32C1471FF7966169D0AA /* PromptForgeApp.swift */; };
+		146C2DA165378FADF1A4AD3D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58250CB61EFE23A04981AFE /* ContentView.swift */; };
+		B5A99ADA590162BD689E345B /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3767CEAC4D46A004F6A641 /* LocalWebServer.swift */; };
+		9E1A0081FABE4DC809529249 /* WebAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD9413DDDC6E5253CAB4188 /* WebAsset.swift */; };
+		EC52D1AC3D7CA031EC1C587B /* ExportBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F892C18A0FB585B669BCA4E /* ExportBridge.swift */; };
+		55845A76C7D6AFC44F1BF2AD /* web in Resources */ = {isa = PBXBuildFile; fileRef = A33C0C70527775B0664F2AFC /* web */; };
+		330EAC5A656B8C7A330DD83B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DF371221373A897261298A7 /* Assets.xcassets */; };
+		35A9E8842CEC28DBBB73C43E /* PromptForgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1DA32C1471FF7966169D0AA /* PromptForgeApp.swift */; };
+		4A7BAF2D904AF04E00111DC0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58250CB61EFE23A04981AFE /* ContentView.swift */; };
+		6F829BA9043DCA47C43CDDBD /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3767CEAC4D46A004F6A641 /* LocalWebServer.swift */; };
+		F40171D6562CBE399C4901FE /* WebAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAD9413DDDC6E5253CAB4188 /* WebAsset.swift */; };
+		A14FF4D67B795E1CFF620591 /* ExportBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F892C18A0FB585B669BCA4E /* ExportBridge.swift */; };
+		DC6E0220FBB602A18DF88EA2 /* web in Resources */ = {isa = PBXBuildFile; fileRef = A33C0C70527775B0664F2AFC /* web */; };
+		517947528A0EDBF1E2522015 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DF371221373A897261298A7 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1DA32C1471FF7966169D0AA /* PromptForgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptForgeApp.swift; sourceTree = "<group>"; };
+		A58250CB61EFE23A04981AFE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CB3767CEAC4D46A004F6A641 /* LocalWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWebServer.swift; sourceTree = "<group>"; };
+		EAD9413DDDC6E5253CAB4188 /* WebAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebAsset.swift; sourceTree = "<group>"; };
+		2F892C18A0FB585B669BCA4E /* ExportBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportBridge.swift; sourceTree = "<group>"; };
+		A33C0C70527775B0664F2AFC /* web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = web; sourceTree = "<group>"; };
+		7DF371221373A897261298A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D86DACD4D5A43E8EBBFA83C9 /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
+		291122ACD421B69BE6BA37EA /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
+		CA40BD3FDD20857ACBA75FC5 /* PromptForge-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PromptForge-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D1BF349F3CDBE7800DB129C8 /* PromptForge-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PromptForge-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9E286C1A3EE631A9B46E5E6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0DF8270122EE94259AD14EBA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		594062CEF85BC56A7C7D2674 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A1DA32C1471FF7966169D0AA /* PromptForgeApp.swift */,
+				A58250CB61EFE23A04981AFE /* ContentView.swift */,
+				CB3767CEAC4D46A004F6A641 /* LocalWebServer.swift */,
+				EAD9413DDDC6E5253CAB4188 /* WebAsset.swift */,
+				2F892C18A0FB585B669BCA4E /* ExportBridge.swift */,
+				F93B529F4AC2CC60B8DD159D /* Resources */,
+			);
+			path = "Sources/PromptForge";
+			sourceTree = "<group>";
+		};
+		F93B529F4AC2CC60B8DD159D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A33C0C70527775B0664F2AFC /* web */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		B3910E40635F4090D26BB3C2 /* App Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7DF371221373A897261298A7 /* Assets.xcassets */,
+				D86DACD4D5A43E8EBBFA83C9 /* Info-macOS.plist */,
+				291122ACD421B69BE6BA37EA /* Info-iOS.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CC0F68FE2D81F9614883F277 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA40BD3FDD20857ACBA75FC5 /* PromptForge-macOS.app */,
+				D1BF349F3CDBE7800DB129C8 /* PromptForge-iOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		956934E60556FDCE0710C957 = {
+			isa = PBXGroup;
+			children = (
+				594062CEF85BC56A7C7D2674 /* Sources */,
+				B3910E40635F4090D26BB3C2 /* App Resources */,
+				CC0F68FE2D81F9614883F277 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B806710A481F978F97249349 /* PromptForge-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D9325F04FDD22FBD7F016DB /* Build configuration list for PBXNativeTarget "PromptForge-macOS" */;
+			buildPhases = (
+				41610D4ECFDFE013DCB15BA3 /* Sources */,
+				9E286C1A3EE631A9B46E5E6B /* Frameworks */,
+				0B82F85C0D8CF6E72DD6B566 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PromptForge-macOS;
+			productName = PromptForge-macOS;
+			productReference = CA40BD3FDD20857ACBA75FC5 /* PromptForge-macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		5D1D20C540B3325DB95D55A4 /* PromptForge-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 71F6E46636BE918C128D2CCA /* Build configuration list for PBXNativeTarget "PromptForge-iOS" */;
+			buildPhases = (
+				D0041ADEEEBAAB8B5799C559 /* Sources */,
+				0DF8270122EE94259AD14EBA /* Frameworks */,
+				4BCE45929E694A857AA98A6C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PromptForge-iOS;
+			productName = PromptForge-iOS;
+			productReference = D1BF349F3CDBE7800DB129C8 /* PromptForge-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					B806710A481F978F97249349 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					5D1D20C540B3325DB95D55A4 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = BBE6974D3B484263D1DA2FD6 /* Build configuration list for PBXProject "PromptForge" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 956934E60556FDCE0710C957;
+			productRefGroup = CC0F68FE2D81F9614883F277 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B806710A481F978F97249349 /* PromptForge-macOS */,
+				5D1D20C540B3325DB95D55A4 /* PromptForge-iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0B82F85C0D8CF6E72DD6B566 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55845A76C7D6AFC44F1BF2AD /* web in Resources */,
+				330EAC5A656B8C7A330DD83B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4BCE45929E694A857AA98A6C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC6E0220FBB602A18DF88EA2 /* web in Resources */,
+				517947528A0EDBF1E2522015 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		41610D4ECFDFE013DCB15BA3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B927110512340789122C00C7 /* PromptForgeApp.swift in Sources */,
+				146C2DA165378FADF1A4AD3D /* ContentView.swift in Sources */,
+				B5A99ADA590162BD689E345B /* LocalWebServer.swift in Sources */,
+				9E1A0081FABE4DC809529249 /* WebAsset.swift in Sources */,
+				EC52D1AC3D7CA031EC1C587B /* ExportBridge.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D0041ADEEEBAAB8B5799C559 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				35A9E8842CEC28DBBB73C43E /* PromptForgeApp.swift in Sources */,
+				4A7BAF2D904AF04E00111DC0 /* ContentView.swift in Sources */,
+				6F829BA9043DCA47C43CDDBD /* LocalWebServer.swift in Sources */,
+				F40171D6562CBE399C4901FE /* WebAsset.swift in Sources */,
+				A14FF4D67B795E1CFF620591 /* ExportBridge.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5E08FC919E6515B13DAAE1E1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		86389B11B6DE1629C3A6A6F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				SWIFT_VERSION = 5.0;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		B565BC4FB505724682A6AC9C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info-macOS.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.promptforge.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "MIT License";
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+			};
+			name = Debug;
+		};
+		954711D1C6BD6A704351A115 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info-macOS.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.promptforge.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "MIT License";
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+			};
+			name = Release;
+		};
+		22A3CF2EEC7D66B5C301AB67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info-iOS.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.promptforge.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_STYLE = Automatic;
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+			};
+			name = Debug;
+		};
+		17FCAB66814B01C14BBF1A25 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Resources/Info-iOS.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.promptforge.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CODE_SIGN_STYLE = Automatic;
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BBE6974D3B484263D1DA2FD6 /* Build configuration list for PBXProject "PromptForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5E08FC919E6515B13DAAE1E1 /* Debug */,
+				86389B11B6DE1629C3A6A6F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0D9325F04FDD22FBD7F016DB /* Build configuration list for PBXNativeTarget "PromptForge-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B565BC4FB505724682A6AC9C /* Debug */,
+				954711D1C6BD6A704351A115 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		71F6E46636BE918C128D2CCA /* Build configuration list for PBXNativeTarget "PromptForge-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				22A3CF2EEC7D66B5C301AB67 /* Debug */,
+				17FCAB66814B01C14BBF1A25 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 46F86FAA6BBF9AC94A7E4595 /* Project object */;
+}
