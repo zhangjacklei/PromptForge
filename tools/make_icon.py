@@ -86,8 +86,9 @@ def main():
 
     os.makedirs(ASSETS, exist_ok=True)
     images = []
-    for scale in (1, 2):
-        for base in (16, 32, 128, 256, 512):
+    # macOS：经典 10 档
+    for base in (16, 32, 128, 256, 512):
+        for scale in (1, 2):
             px = base * scale
             fname = 'icon_%dx%d%s.png' % (base, base, '@2x' if scale == 2 else '')
             render(px).save(os.path.join(ASSETS, fname))
@@ -97,17 +98,18 @@ def main():
                 'scale': '%dx' % scale,
                 'size': '%dx%d' % (base, base),
             })
-            if base in (16, 32, 128, 256, 512):
-                images.append({
-                    'filename': fname,
-                    'idiom': 'universal',
-                    'platform': 'ios',
-                    'scale': '%dx' % scale,
-                    'size': '%dx%d' % (base, base),
-                })
+    # iOS：单尺寸 1024（Xcode 14+ 支持单尺寸 App Icon）
+    render(1024).save(os.path.join(ASSETS, 'icon_ios_1024.png'))
+    images.append({
+        'filename': 'icon_ios_1024.png',
+        'idiom': 'universal',
+        'platform': 'ios',
+        'scale': '1x',
+        'size': '1024x1024',
+    })
     with open(os.path.join(ASSETS, 'Contents.json'), 'w', encoding='utf-8') as f:
         json.dump({'images': images, 'info': {'author': 'xcode', 'version': 1}}, f, indent=2)
-    print('已生成', os.path.relpath(ASSETS, ROOT), len(images), '张')
+    print('已生成', os.path.relpath(ASSETS, ROOT), len(images), '项')
 
 
 if __name__ == '__main__':
