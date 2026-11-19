@@ -150,6 +150,26 @@ open Sources/PromptForge/Resources/web/index.html
 - **浏览器 / 网页版**：用系统文件选择框，逻辑与 App 一致。
 - 恢复后会自动跳回「装配」页；如果提示「文件格式不对」，说明选的不是本工具的备份（文件里应有 `"kind": "promptforge-workspace"`）。
 - 备份里只有你自己的使用数据，**不含提示词库本体**——库是随 App 打包的只读 `data/library.json`。
+- **备份可以带库**：如果当前库是通过「导入备份」装进来的全量库，导出的备份会把整库一起打包
+  （文件里多一个 `library` 字段，约 1.3 MB / 900 条），换机器导入一次库和数据同时到位。
+  没导入过库时，备份只含个人数据，入库仍是 App 内置的那几条。
+- **库的优先级**：`localStorage.pf.lib`（导入的库）> 包内 `data/library.json`（内置库）。
+  想退回内置示例：第七节「清空本地数据」会一并删掉 `pf.lib` 并自动重载。
+- **自己造一份全量库备份**：把库 JSON 与个人数据装在同一个对象里即可，导入侧只认 `kind`
+  和 `library` 两个关键字段：
+
+  ```json
+  {
+    "kind": "promptforge-workspace",
+    "ver": 4,
+    "at": "2026-11-19T21:58:00+08:00",
+    "state": { "model": "z-turbo", "aspect": "3:4", "seg": { "subject": "" } },
+    "versions": {}, "outputs": {}, "lora": {}, "ab": {},
+    "queue": [], "customLora": [], "presets": [],
+    "library": { "meta": {}, "image": [], "video": [], "params": [], "edits": [], "lexicon": [], "guide": [] }
+  }
+  ```
+
 
 
 ---

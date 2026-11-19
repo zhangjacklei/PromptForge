@@ -6,7 +6,18 @@
 (function (global) {
   'use strict';
 
-  const LIB = global.__LIB__ || { image: [], video: [], params: [], edits: [], lexicon: [], guide: [] };
+  /* 库来源优先级：localStorage 里导入过的库（pf.lib）> 打包内置库（__LIB__）
+   * 「全量备份」导入后会把整库落到 pf.lib，刷新即生效；清空本地数据则回落到内置示例库。 */
+  const LIB = (function () {
+    try {
+      const raw = global.localStorage && global.localStorage.getItem('pf.lib');
+      if (raw) {
+        const o = JSON.parse(raw);
+        if (o && (o.image || o.video)) return o;
+      }
+    } catch (e) { }
+    return global.__LIB__ || { image: [], video: [], params: [], edits: [], lexicon: [], guide: [] };
+  })();
 
   /* ---------------- 模型适配表 ----------------
    * weights  是否支持 (xxx:1.2) 权重语法

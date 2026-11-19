@@ -1885,12 +1885,20 @@
   }
 
   /* ---------------- v3 · 工作区备份与恢复 ---------------- */
+  const libIsImported = () => { try { return !!localStorage.getItem('pf.lib'); } catch (e) { return false; } };
+
+  /** 备份体：个人数据 + （若导入过全量库）整库一起带上，换机器一次到位。 */
   function workspace() {
-    return {
-      kind: 'promptforge-workspace', ver: 3, at: new Date().toISOString(),
+    const w = {
+      kind: 'promptforge-workspace', ver: 4, at: new Date().toISOString(),
       state, versions: mem.versions, outputs: mem.outputs, lora: mem.lora,
       ab: mem.ab, queue: mem.queue, customLora: mem.customLora, presets: mem.presets
     };
+    if (libIsImported()) {
+      w.library = LIB;
+      w.libraryAt = (LIB.meta && LIB.meta.builtAt) || '';
+    }
+    return w;
   }
   /** 把备份 JSON 文本写回本地状态：网页选择框与原生 pfImport 桥共用同一段逻辑。 */
   function applyWorkspaceText(text) {
@@ -1901,7 +1909,25 @@
       ['versions', 'outputs', 'lora', 'ab', 'queue', 'customLora', 'presets'].forEach(k => {
         if (w[k] != null) mem[k] = w[k];
       });
-      save(); persist(); route('compose');
+      // 备份里带库 → 落到 pf.lib，engine 下次加载优先用它
+      const hasLib = w.library && (w.library.image || w.library.video);
+      if (hasLib) {
+        try { localStorage.setItem('pf.lib', JSON.stringify(w.library)); } catch (e) {
+          throw new Error('库太大，写入本地失败（' + e.message + '）');
+        }
+      }
+      save(); persist();
+      if (hasLib) {
+        const n = (w.library.image || []).length + (w.library.video || []).length;
+        const obj = (w.library.edits || []).length;
+        try {
+          localStorage.setItem('pf.flash', '已导入备份：库 ' + n + ' 条提示词' +
+            (obj ? ' + ' + obj + ' 条编辑工序' : '') + '，个人数据已恢复');
+        } catch (e) { }
+        location.reload();
+        return true;
+      }
+      route('compose');
       toast('已恢复 ' + (w.at || '').slice(0, 10) + ' 的备份');
       return true;
     } catch (err) {
@@ -1915,16 +1941,21 @@
 
   function bindBackup() {
     const n = $('#backup-note');
-    const cnt = k => Object.keys(mem[k] || {}).length + (Array.isArray(mem[k]) ? 0 : 0);
-    if (n) n.innerHTML = '当前本地：版本 <b>' + Object.keys(mem.versions).reduce((a, k) => a + mem.versions[k].length, 0) +
-      '</b> 条 · 出图记录 <b>' + Object.keys(mem.outputs).reduce((a, k) => a + mem.outputs[k].length, 0) +
-      '</b> 条 · 配方 <b>' + mem.presets.length + '</b> 个 · 采集队列 <b>' + mem.queue.length + '</b> 条';
+    if (n) {
+      const libN = (LIB.image || []).length + (LIB.video || []).length;
+      n.innerHTML = '当前本地：版本 <b>' + Object.keys(mem.versions).reduce((a, k) => a + mem.versions[k].length, 0) +
+        '</b> 条 · 出图记录 <b>' + Object.keys(mem.outputs).reduce((a, k) => a + mem.outputs[k].length, 0) +
+        '</b> 条 · 配方 <b>' + mem.presets.length + '</b> 个 · 采集队列 <b>' + mem.queue.length + '</b> 条' +
+        ' · 库 <b>' + libN + '</b> 条' +
+        (libIsImported() ? '（已导入，会随备份一起带走）' : '（内置示例，备份只带个人数据）');
+    }
 
     const bd = $('#btn-backup');
     if (bd) bd.onclick = () => {
       const w = workspace();
-      download('promptforge-workspace-' + today() + '.json', JSON.stringify(w, null, 1), 'application/json');
-      toast('备份已下载，换电脑时导入即可');
+      download('promptforge-workspace-' + today() + '.json', JSON.stringify(w), 'application/json');
+      toast(w.library ? '备份已下载（含库 ' + ((w.library.image || []).length + (w.library.video || []).length) + ' 条）'
+        : '备份已下载，换电脑时导入即可');
     };
     // 原生壳里 WKWebView 不给 <input type=file> 弹面板（未实现 WKUIDelegate 时按「取消」处理），
     // 所以壳里改走 pfImport 桥让原生开系统选择框；浏览器与云端页面仍用网页选择框。
@@ -1944,10 +1975,20 @@
     };
     const wp = $('#btn-wipe');
     if (wp) wp.onclick = () => {
-      if (!confirm('清空浏览器里存的全部本地数据（不影响库文件）？建议先导出备份。')) return;
+      const hadLib = libIsImported();
+      const msg = hadLib
+        ? '清空本地数据，并把导入的库退回内置示例库？建议先导出备份。'
+        : '清空浏览器里存的全部本地数据（不影响库文件）？建议先导出备份。';
+      if (!confirm(msg)) return;
       mem = { versions: {}, outputs: {}, lora: {}, ab: {}, queue: [], customLora: [], presets: [] };
       state = JSON.parse(JSON.stringify(DEFAULT));
-      persist(); save(); route('compose'); toast('已清空本地数据');
+      persist(); save();
+      if (hadLib) {
+        try { localStorage.removeItem('pf.lib'); localStorage.setItem('pf.flash', '已清空本地数据，库已退回内置示例'); } catch (e) { }
+        location.reload();
+        return;
+      }
+      route('compose'); toast('已清空本地数据');
     };
   }
 
@@ -1987,6 +2028,11 @@
       save(); refreshMeta(); syncPreview();
     });
     renderShell(); renderTabs(); route('compose');
+    // 导入/清空后页面会 reload，用它把结果提示带过来
+    try {
+      const flash = localStorage.getItem('pf.flash');
+      if (flash) { localStorage.removeItem('pf.flash'); setTimeout(() => toast(flash), 400); }
+    } catch (e) { }
     document.querySelectorAll('#tabs button[data-tab]').forEach(b => {
       b.onclick = () => route(b.dataset.tab);
     });
