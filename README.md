@@ -131,7 +131,26 @@ open Sources/PromptForge/Resources/web/index.html
 
   也可以直接替换 `data/library.json` 后重跑 `tools/build_web.py`。
 - 所有个人数据（装配状态、出图记录、采集队列、版本树）都存在 **localStorage**，纯本地，
-  不联网、不上传。清浏览器 / App 数据前请先在「实验 → 导出清单」里留档。
+  不联网、不上传。清浏览器 / App 数据前请先备份。
+
+### 备份与恢复
+
+数据只在 App 自己的 localStorage 里，**换机器、清缓存、重装都会丢**，所以动之前先导一次。
+
+| 动作 | 位置 | 说明 |
+|---|---|---|
+| 导出备份 | 「方案」页 → 第七节「工作区备份」→ **导出工作区备份** | 生成 `promptforge-workspace-YYYY-MM-DD.json`，一个文件带走装配状态、版本树、出图记录、配方、采集队列、自定义 LoRA |
+| 导入备份 | 同一节 → **导入备份** | macOS 弹系统选择框选那个 JSON，确认后覆盖当前本地状态 |
+| 清空数据 | 同一节 → **清空本地数据** | 只清 localStorage，不动库文件 |
+
+- **macOS**：导入走原生 `NSOpenPanel`（页面通过 `pfImport` 桥请求）。原因是 WKWebView 不会为
+  `<input type="file">` 自己弹面板——不实现 `WKUIDelegate` 的 `runOpenPanel` 时，系统按「取消」处理，
+  点了会毫无反应。所以壳里由原生开面板、读文本，再回注 `window.pfRestore(text)`。
+- **iOS**：WKWebView 自己会弹「照片图库 / 选择文件」，走页面的 `<input type="file">` 即可。
+- **浏览器 / 网页版**：用系统文件选择框，逻辑与 App 一致。
+- 恢复后会自动跳回「装配」页；如果提示「文件格式不对」，说明选的不是本工具的备份（文件里应有 `"kind": "promptforge-workspace"`）。
+- 备份里只有你自己的使用数据，**不含提示词库本体**——库是随 App 打包的只读 `data/library.json`。
+
 
 ---
 
@@ -144,7 +163,7 @@ PromptForge/
 │   ├── ContentView.swift            # 启动态 / 错误态 / WKWebView 包装
 │   ├── LocalWebServer.swift         # 只监听 127.0.0.1 的极简静态服务
 │   ├── WebAsset.swift               # 三种运行形态下定位内置页面
-│   ├── ExportBridge.swift           # 导出接系统保存面板 / 分享面板
+│   ├── ExportBridge.swift           # 导出接系统保存面板 / 分享面板；导入接 macOS 文件面板
 │   └── Resources/web/index.html     # 构建产物（单文件，零外链）
 ├── src/                             # 前端源码（未打包）
 │   ├── engine.js                    # 模型表、槽位解析、lint、断言、负向映射
@@ -178,6 +197,13 @@ iOS 的 WKWebView 不处理 Blob 触发的 `a[download]`，点了没反应。所
 会先探测 `window.webkit.messageHandlers.pfExport`：存在就把 `{name, text, mime}` 交给原生，
 由 macOS 的 `NSSavePanel` 或 iOS 的 `UIActivityViewController` 落地；浏览器里仍走 Blob 下载。
 只用公开 API。
+
+**导入为什么也需要一个桥？**
+macOS 的 WKWebView 不会为 `<input type="file">` 自动弹面板：如果宿主没有实现 `WKUIDelegate` 的
+`webView:runOpenPanelWithParameters:initiatedByFrame:completionHandler:`，系统会按用户点了「取消」处理，
+于是「导入备份」看起来完全没反应。App 里因此加了 `pfImport` 消息：页面发消息 → 原生开 `NSOpenPanel`
+→ 读成 UTF-8 文本 → `evaluateJavaScript` 调 `window.pfRestore(text)` 写回 localStorage。
+没有这个桥的环境（浏览器、网页版、iOS）继续用原生文件选择，行为不变。
 
 ---
 

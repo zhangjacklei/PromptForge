@@ -3,6 +3,7 @@ import WebKit
 
 #if os(macOS)
 import AppKit
+import UniformTypeIdentifiers
 #else
 import UIKit
 #endif
@@ -11,13 +12,29 @@ import UIKit
 ///
 /// 网页端 `download()` 先检测 `window.webkit.messageHandlers.pfExport`，
 /// 存在就把 `{name, text, mime}` 交给原生；浏览器里则照旧用 Blob 下载。
+///
+/// 导入桥（macOS）：`<input type=file>` 在 WKWebView 里不会自己弹面板
+/// （未实现 `WKUIDelegate` 的 runOpenPanel 时按「取消」处理），
+/// 所以页面点「导入备份」时改发 `pfImport`，由原生开 NSOpenPanel 读文本，
+/// 再回注 `window.pfRestore(text)`。
+///
 /// 只用公开 API，不依赖任何私有框架。
 final class ExportBridge: NSObject, WKScriptMessageHandler {
 
     static let handlerName = "pfExport"
+    static let importHandlerName = "pfImport"
+
+    /// 回注脚本需要它；由 WebViewFactory 在建好 WKWebView 后赋值。
+    weak var webView: WKWebView?
 
     func userContentController(_ userContentController: WKUserContentController,
                                didReceive message: WKScriptMessage) {
+
+        if message.name == Self.importHandlerName {
+            openFilePanel()
+            return
+        }
+
         guard message.name == Self.handlerName,
               let body = message.body as? [String: Any],
               let name = body["name"] as? String,
@@ -47,6 +64,57 @@ final class ExportBridge: NSObject, WKScriptMessageHandler {
         shareOnIOS(fileURL: tmpURL)
         #endif
         _ = mime
+    }
+
+    // MARK: - 导入
+
+    private func openFilePanel() {
+        #if os(macOS)
+        DispatchQueue.main.async { [weak self] in
+            let panel = NSOpenPanel()
+            panel.title = "导入工作区备份"
+            panel.message = "选择 promptforge-workspace-开头的 .json 备份"
+            panel.prompt = "导入"
+            panel.allowsMultipleSelection = false
+            panel.canChooseDirectories = false
+            panel.canChooseFiles = true
+            panel.allowedContentTypes = [.json, .plainText]
+
+            let done: (NSApplication.ModalResponse) -> Void = { response in
+                guard response == .OK, let url = panel.url else { return }
+                guard let data = try? Data(contentsOf: url),
+                      let text = String(data: data, encoding: .utf8) else {
+                    self?.inject("window.pfRestoreFail && window.pfRestoreFail('文件读不出来，确认是 UTF-8 编码的 JSON')")
+                    return
+                }
+                self?.inject("window.pfRestore && window.pfRestore(\(Self.jsStringLiteral(text)))")
+            }
+
+            if let window = self?.webView?.window {
+                panel.beginSheetModal(for: window, completionHandler: done)
+            } else {
+                panel.begin(completionHandler: done)
+            }
+        }
+        #endif
+        // iOS：WKWebView 自身会弹「照片图库 / 选择文件」，页面侧走 <input type=file> 兜底。
+    }
+
+    /// 把任意文本包成安全的 JS 字符串字面量（JSON 字符串字面量与 JS 兼容）。
+    private static func jsStringLiteral(_ s: String) -> String {
+        var body = "[]"
+        if let data = try? JSONSerialization.data(withJSONObject: [s], options: [.withoutEscapingSlashes]),
+           let arr = String(data: data, encoding: .utf8), arr.count >= 2 {
+            body = String(arr.dropFirst().dropLast())
+        }
+        return body
+            .replacingOccurrences(of: "\u{2028}", with: "\\u2028")
+            .replacingOccurrences(of: "\u{2029}", with: "\\u2029")
+    }
+
+    private func inject(_ script: String) {
+        guard let web = webView else { return }
+        web.evaluateJavaScript(script, completionHandler: nil)
     }
 
     private static func safeFileName(_ raw: String) -> String {

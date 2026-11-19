@@ -77,6 +77,12 @@
     }
   }
   function download(name, text, mime) {
+    // 原生壳（macOS / iOS）里 blob 下载不落地，交给原生保存面板 / 分享面板
+    const bridge = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.pfExport;
+    if (bridge) {
+      try { bridge.postMessage({ name: String(name), text: String(text), mime: mime || 'text/plain;charset=utf-8' }); return; }
+      catch (e) { /* 桥不可用时退回浏览器下载 */ }
+    }
     const blob = new Blob([text], { type: mime || 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob); a.download = name; a.click();
@@ -1886,6 +1892,27 @@
       ab: mem.ab, queue: mem.queue, customLora: mem.customLora, presets: mem.presets
     };
   }
+  /** 把备份 JSON 文本写回本地状态：网页选择框与原生 pfImport 桥共用同一段逻辑。 */
+  function applyWorkspaceText(text) {
+    try {
+      const w = JSON.parse(String(text));
+      if (w.kind !== 'promptforge-workspace') throw new Error('文件格式不对');
+      if (w.state && w.state.seg) state = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), w.state);
+      ['versions', 'outputs', 'lora', 'ab', 'queue', 'customLora', 'presets'].forEach(k => {
+        if (w[k] != null) mem[k] = w[k];
+      });
+      save(); persist(); route('compose');
+      toast('已恢复 ' + (w.at || '').slice(0, 10) + ' 的备份');
+      return true;
+    } catch (err) {
+      toast('恢复失败：' + err.message);
+      return false;
+    }
+  }
+  // 原生壳读取文件后回注；失败时用 pfRestoreFail 提示原因
+  window.pfRestore = applyWorkspaceText;
+  window.pfRestoreFail = msg => toast('恢复失败：' + msg);
+
   function bindBackup() {
     const n = $('#backup-note');
     const cnt = k => Object.keys(mem[k] || {}).length + (Array.isArray(mem[k]) ? 0 : 0);
@@ -1899,23 +1926,20 @@
       download('promptforge-workspace-' + today() + '.json', JSON.stringify(w, null, 1), 'application/json');
       toast('备份已下载，换电脑时导入即可');
     };
+    // 原生壳里 WKWebView 不给 <input type=file> 弹面板（未实现 WKUIDelegate 时按「取消」处理），
+    // 所以壳里改走 pfImport 桥让原生开系统选择框；浏览器与云端页面仍用网页选择框。
     const rs = $('#btn-restore'), fi = $('#file-restore');
-    if (rs) rs.onclick = () => fi.click();
+    if (rs) rs.onclick = () => {
+      const imp = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.pfImport;
+      if (imp) {
+        try { imp.postMessage({}); return; } catch (e) { /* 桥异常时退回网页选择框 */ }
+      }
+      fi.click();
+    };
     if (fi) fi.onchange = e => {
       const f = e.target.files && e.target.files[0]; if (!f) return;
       const r = new FileReader();
-      r.onload = () => {
-        try {
-          const w = JSON.parse(r.result);
-          if (w.kind !== 'promptforge-workspace') throw new Error('文件格式不对');
-          if (w.state && w.state.seg) state = Object.assign(JSON.parse(JSON.stringify(DEFAULT)), w.state);
-          ['versions', 'outputs', 'lora', 'ab', 'queue', 'customLora', 'presets'].forEach(k => {
-            if (w[k] != null) mem[k] = w[k];
-          });
-          save(); persist(); route('compose');
-          toast('已恢复 ' + (w.at || '').slice(0, 10) + ' 的备份');
-        } catch (err) { toast('恢复失败：' + err.message); }
-      };
+      r.onload = () => applyWorkspaceText(r.result);
       r.readAsText(f);
     };
     const wp = $('#btn-wipe');

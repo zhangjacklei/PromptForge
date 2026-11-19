@@ -115,10 +115,15 @@ enum WebViewFactory {
     static func make(url: URL, bridge: ExportBridge) -> WKWebView {
         let config = WKWebViewConfiguration()
         config.userContentController.add(bridge, name: ExportBridge.handlerName)
+        #if os(macOS)
+        // 文件选择面板必须由原生提供，见 ExportBridge 注释
+        config.userContentController.add(bridge, name: ExportBridge.importHandlerName)
+        #endif
         config.defaultWebpagePreferences.allowsContentJavaScript = true
         config.websiteDataStore = .default()
 
         let webView = WKWebView(frame: .zero, configuration: config)
+        bridge.webView = webView
 
         #if os(macOS)
         webView.allowsBackForwardNavigationGestures = true
