@@ -88,6 +88,27 @@ open PromptForge.xcodeproj
 
 选 `PromptForge-macOS` scheme → Run。首次运行若提示无法验证开发者，右键 App → 打开。
 
+**③ 打成 DMG 分发**
+
+```bash
+make dmg          # 产出 build/PromptForge-1.0-macOS-<arch>.dmg
+```
+
+DMG 里是 App + 指向 `/Applications` 的快捷方式 + 一份 `使用说明.txt`（写清了首次被拦时怎么放行）。
+适合发给别人：对方挂载后拖进应用程序即可，不需要额外解压工具。
+
+> **为什么会被 Gatekeeper 拦？** 本项目的 App 只做 ad-hoc 签名（`Signature=adhoc`、`TeamIdentifier=not set`），
+> 没有 Apple 开发者证书，也没做公证（notarization）。系统因此无法验证来源，会提示
+> 「无法打开，因为 Apple 无法检查其是否包含恶意软件」。这不是文件损坏。放行方式三选一：
+>
+> 1. 右键 App → **打开** → 再点「打开」（macOS 13/14）；
+> 2. 系统设置 → 隐私与安全性 → 下方找到该 App → **仍要打开**（macOS 15+ 只能走这条）；
+> 3. 终端执行 `xattr -dr com.apple.quarantine /Applications/PromptForge.app`。
+>
+> 顺带一提：用第三方解压工具（如 Keka）解 zip 有时会丢签名或带上隔离标记，直接用 `dmg`
+> 或 Finder 自带的归档工具更稳。
+
+
 ### iOS
 
 ```bash
@@ -197,8 +218,8 @@ PromptForge/
 │   ├── make_demo_library.py         # 从私有库裁剪出示例
 │   ├── make_icon.py                 # 生成图标（纯几何绘制，无第三方素材）
 │   └── gen_xcodeproj.py             # 生成 .xcodeproj（不含任何本机信息）
-├── Resources/                       # Info.plist / 图标 / 资源目录
-├── Makefile                         # macos 构建入口
+├── Resources/                       # Info.plist / 图标 / 安装说明 / 资源目录
+├── Makefile                         # macos 构建入口（make app / make dmg）
 └── LICENSE
 ```
 
