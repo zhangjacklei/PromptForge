@@ -914,7 +914,7 @@
       '<input type="text" id="lex-q" placeholder="搜词，如「鹅蛋脸」「缎面」「丁达尔」" value="' + U.esc(lexQ) + '">' +
       (lexMode === 'words'
         ? '<select id="lex-slot"><option value="">全部槽位</option>' +
-        ['主体', '人物特征', '服饰造型', '场景环境'].map(s => '<option' + (s === lexSlot ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>'
+        U.uniq(all.map(x => x.slot)).map(s => '<option' + (s === lexSlot ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>'
         : '<select id="lex-slot"><option value="">全部类型</option><option>画质</option><option>人体</option><option>AI痕迹</option><option>视频</option><option>英文</option></select>') +
       '<span class="n">' + (lexMode === 'words' ? all.length + ' 个维度 · ' + total + ' 个词' : '双向：负向 ⇄ 正面') + '</span></div>' +
       (lexMode === 'neg' ? negPanelHtml() : '<div class="lex" id="lex-grid"></div>');

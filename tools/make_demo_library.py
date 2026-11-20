@@ -61,7 +61,9 @@ def main():
     videos = [p for p in picked if p.get('type') == '视频']
 
     lexicon = lib.get('lexicon', [])
-    keep_lex = [x for x in lexicon if x.get('slot') in KEEP_LEXICON_SLOTS][:12]
+    # 词库是通用方法论词汇（10 个段落 / 100+ 维度），不属于提示词资产，整份保留；
+    # 只裁提示词条与参数表，避免私有内容进仓库。
+    keep_lex = list(lexicon)
 
     demo = {
         'meta': {
