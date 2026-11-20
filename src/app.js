@@ -902,6 +902,19 @@
    * 词库（含负向映射）
    * ===================================================================== */
   let lexQ = '', lexSlot = '', lexMode = 'words';
+  /* 库来源说明：让「换新版 App 后词库有没有跟进」这件事一眼可见 */
+  function libSourceLine() {
+    const up = LIB.lexUpgraded;
+    let imported = false;
+    try { imported = !!localStorage.getItem('pf.lib'); } catch (e) { }
+    const bits = [];
+    if (up) bits.push('词库已随本版自动升级：<b>' + up.dims[0] + ' 维 ' + up.from + ' 词 → ' +
+      up.dims[1] + ' 维 ' + up.to + ' 词</b>');
+    bits.push(imported
+      ? '当前用<b>导入库</b>（你自己的提示词），词库跟随 App 版本自动更新'
+      : '当前用<b>内置示例库</b>（5 条示例提示词 + 完整词库）');
+    return bits.join(' · ');
+  }
   function renderLexicon() {
     const all = LIB.lexicon;
     const total = all.reduce((n, x) => n + x.words.length, 0);
@@ -917,6 +930,7 @@
         U.uniq(all.map(x => x.slot)).map(s => '<option' + (s === lexSlot ? ' selected' : '') + '>' + s + '</option>').join('') + '</select>'
         : '<select id="lex-slot"><option value="">全部类型</option><option>画质</option><option>人体</option><option>AI痕迹</option><option>视频</option><option>英文</option></select>') +
       '<span class="n">' + (lexMode === 'words' ? all.length + ' 个维度 · ' + total + ' 个词' : '双向：负向 ⇄ 正面') + '</span></div>' +
+      '<div class="hintline">' + libSourceLine() + '</div>' +
       (lexMode === 'neg' ? negPanelHtml() : '<div class="lex" id="lex-grid"></div>');
 
     $$('.seg-tabs [data-lm]').forEach(b => b.onclick = () => { lexMode = b.dataset.lm; renderLexicon(); });
@@ -1911,7 +1925,19 @@
       });
       // 备份里带库 → 落到 pf.lib，engine 下次加载优先用它
       const hasLib = w.library && (w.library.image || w.library.video);
+      let lexUp = null;
       if (hasLib) {
+        /* 词库是工具底座、不是用户数据：备份里的词库若明显落后于本版内置词库，
+         * 就用内置词库替换（提示词/编辑工序照旧用备份里的），避免导旧备份把词库打回老版本。 */
+        try {
+          const bl = (window.__LIB__ && window.__LIB__.lexicon) || [];
+          const cnt = a => (Array.isArray(a) ? a : []).reduce((s, d) => s + ((d && d.words) ? d.words.length : 0), 0);
+          const oldN = cnt(w.library.lexicon), newN = cnt(bl);
+          if (newN > oldN * 1.15) {
+            w.library.lexicon = bl;
+            lexUp = oldN + ' → ' + newN;
+          }
+        } catch (e) { }
         try { localStorage.setItem('pf.lib', JSON.stringify(w.library)); } catch (e) {
           throw new Error('库太大，写入本地失败（' + e.message + '）');
         }
@@ -1922,7 +1948,8 @@
         const obj = (w.library.edits || []).length;
         try {
           localStorage.setItem('pf.flash', '已导入备份：库 ' + n + ' 条提示词' +
-            (obj ? ' + ' + obj + ' 条编辑工序' : '') + '，个人数据已恢复');
+            (obj ? ' + ' + obj + ' 条编辑工序' : '') + '，个人数据已恢复' +
+            (lexUp ? '；词库已升级为本版（' + lexUp + ' 词）' : ''));
         } catch (e) { }
         location.reload();
         return true;

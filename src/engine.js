@@ -7,16 +7,34 @@
   'use strict';
 
   /* 库来源优先级：localStorage 里导入过的库（pf.lib）> 打包内置库（__LIB__）
-   * 「全量备份」导入后会把整库落到 pf.lib，刷新即生效；清空本地数据则回落到内置示例库。 */
+   * 「全量备份」导入后会把整库落到 pf.lib，刷新即生效；清空本地数据则回落到内置示例库。
+   *
+   * 词库自动升级（v3.1）：导入过的库会把内置库整体遮蔽，导致「换新版本 App 后词库还是旧的」。
+   * 词库属于工具底座、不是用户数据，所以只要内置库的词库明显更全（词数多 15% 以上），
+   * 就用内置词库覆盖 pf.lib 里的词库，提示词/参数/编辑工序等用户数据一律不动。 */
+  const lexWordCount = (lex) => (Array.isArray(lex) ? lex : [])
+    .reduce((n, d) => n + ((d && d.words) ? d.words.length : 0), 0);
+
   const LIB = (function () {
+    const builtin = global.__LIB__ || { image: [], video: [], params: [], edits: [], lexicon: [], guide: [] };
     try {
       const raw = global.localStorage && global.localStorage.getItem('pf.lib');
       if (raw) {
         const o = JSON.parse(raw);
-        if (o && (o.image || o.video)) return o;
+        if (o && (o.image || o.video)) {
+          const oldN = lexWordCount(o.lexicon);
+          const newN = lexWordCount(builtin.lexicon);
+          if (newN > oldN * 1.15) {
+            const oldDims = Array.isArray(o.lexicon) ? o.lexicon.length : 0;
+            o.lexicon = builtin.lexicon;
+            o.lexUpgraded = { from: oldN, to: newN, dims: [oldDims, (builtin.lexicon || []).length] };
+            try { global.localStorage.setItem('pf.lib', JSON.stringify(o)); } catch (e) { }
+          }
+          return o;
+        }
       }
     } catch (e) { }
-    return global.__LIB__ || { image: [], video: [], params: [], edits: [], lexicon: [], guide: [] };
+    return builtin;
   })();
 
   /* ---------------- 模型适配表 ----------------
